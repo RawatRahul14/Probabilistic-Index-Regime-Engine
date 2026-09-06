@@ -1,0 +1,140 @@
+# === Build System ===
+
+[build-system]
+requires = ["setuptools>=75.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+
+# === Project Configuration ===
+
+[project]
+
+name = "probabilistic-index-regime-engine"
+version = "0.1.0"
+description = "A probabilistic market regime detection engine for index markets using price action, volatility, technical state, and news sentiment."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+
+# === Authors ===
+
+authors = [
+    { name = "Rahul Rawat" }
+]
+
+# === Keywords ===
+
+keywords = [
+    "quantitative-finance",
+    "algorithmic-trading",
+    "market-regime",
+    "probability",
+    "time-series",
+    "financial-markets",
+    "index-trading",
+    "volatility",
+    "sentiment-analysis",
+    "backtesting"
+]
+
+# === Classifiers ===
+
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+
+
+# === Core Dependencies ===
+
+dependencies = [
+    "numpy>=2.0,<3.0",
+    "pandas>=2.2,<3.0",
+    "pydantic>=2.0,<3.0",
+    "pydantic-settings>=2.0,<3.0",
+    "duckdb>=1.0,<2.0",
+    "yfinance>=0.2,<1.0",
+    "httpx>=0.27,<1.0",
+    "langchain-openai>=0.3,<1.0",
+    "langgraph>=0.6,<1.0"
+]
+
+# === Optional Dependencies ===
+
+[project.optional-dependencies]
+
+# === Development Dependencies ===
+
+dev = [
+    "pytest>=8.0,<9.0",
+    "pytest-asyncio>=0.23,<2.0",
+    "ruff>=0.6",
+    "mypy>=1.11,<2.0"
+]
+
+# === C++ / Python Integration Dependencies ===
+
+cpp = [
+    "pybind11>=2.13,<4.0"
+]
+
+
+# === Project URLs ===
+
+[project.urls]
+
+Homepage = "https://github.com/RawatRahul14/Probabilistic-Index-Regime-Engine"
+Repository = "https://github.com/RawatRahul14/Probabilistic-Index-Regime-Engine"
+Issues = "https://github.com/RawatRahul14/Probabilistic-Index-Regime-Engine/issues"
+
+
+# === Setuptools Configuration ===
+
+[tool.setuptools.packages.find]
+
+where = ["src"]
+
+
+# === Pytest Configuration ===
+
+[tool.pytest.ini_options]
+
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+
+# === Ruff Configuration ===
+
+[tool.ruff]
+
+target-version = "py311"
+line-length = 88
+
+
+# === Ruff Lint Rules ===
+
+[tool.ruff.lint]
+
+select = [
+    "E",
+    "F",
+    "I",
+    "UP"
+]
+
+
+# === Mypy Configuration ===
+
+[tool.mypy]
+
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
