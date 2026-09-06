@@ -124,3 +124,10 @@ class NiftyIngest:
             raise RuntimeError(
                 f"Error inserting Nifty data: {e}"
             )
+
+    def run(self) -> None:
+        ## === Downloading the data ===
+        data = self._ingest_data()
+
+        ## === Inserting data into database ===
+        self._insert_data(dat = data)

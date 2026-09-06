@@ -10,13 +10,11 @@ class NiftyIngestPipeline:
         try:
 
             ## === Initiating Nifty Ingest ===
-            ingest = NiftyIngest()
-
-            ## === Downloading data ===
-            data = ingest._ingest_data()
-
-            ## === Saving Data ===
-            ingest._insert_data(data = data)
+            ingest = NiftyIngest().run()
 
         except Exception as e:
             raise ValueError(f"Error running the 'NiftyIngestPipeline': {e}")
+
+if __name__ == "__main__":
+    nifty_pipeline = NiftyIngestPipeline()
+    nifty_pipeline.main()
