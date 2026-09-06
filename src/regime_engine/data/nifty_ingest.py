@@ -1,5 +1,5 @@
 # === Regime Engine Modules ===
-from regime_engine.models.nifty_model import NiftyCandle
+from regime_engine.data.nifty_validator import NiftyDataValidator
 
 # === Database Modules ===
 import duckdb
@@ -126,8 +126,15 @@ class NiftyIngest:
             )
 
     def run(self) -> None:
+        """
+        Downloads, validates, and persists NIFTY historical data.
+        """
+
         ## === Downloading the data ===
         data = self._ingest_data()
 
+        ## === Validating the data ===
+        NiftyDataValidator.validate_schema(data = data)
+
         ## === Inserting data into database ===
-        self._insert_data(dat = data)
+        self._insert_data(data = data)

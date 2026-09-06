@@ -10,7 +10,7 @@ class NiftyIngestPipeline:
         try:
 
             ## === Initiating Nifty Ingest ===
-            ingest = NiftyIngest().run()
+            NiftyIngest().run()
 
         except Exception as e:
             raise ValueError(f"Error running the 'NiftyIngestPipeline': {e}")
