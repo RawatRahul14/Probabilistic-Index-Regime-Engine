@@ -41,9 +41,9 @@ Probabilty Regimes:
 
 ### 2. What could happen next?
 
-$[P(R_{t+1} > 0) \mid X_t]$
-$[P(R_{t+1} > 1) \mid X_t]$
-$[P(R_{t+1} < -1) \mid X_t]$
+$[P(R_{t+1} > 0) \mid X_t]$  
+$[P(R_{t+1} > 1) \mid X_t]$  
+$[P(R_{t+1} < -1) \mid X_t]$  
 $[P(R_{t+1} > b) \mid X_t]$
 
 ### 3. What does this impy for options?
@@ -76,4 +76,29 @@ open
 high
 low
 close
+```
+
+### Phase - 2: Core Mathematical Features
+
+v0.2.0 - Returns Engine
+- Calculate Simple Returns:
+$$
+[R_t = \frac{S_t}{S_{t-1}}]
+$$
+
+- Calculate Log Returns:
+$$
+[r_t = \ln\left(\frac{S_t}{S_{t-1}}\right)]
+$$
+or,
+$$
+[r_t = \ln\left(R_t\right)]
+$$
+
+Example:
+```text
+return_1  
+return_5  
+return_10  
+return_20  
 ```

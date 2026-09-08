@@ -10,7 +10,7 @@ build-backend = "setuptools.build_meta"
 [project]
 
 name = "probabilistic-index-regime-engine"
-version = "0.1.0"
+version = "0.2.0"
 description = "A probabilistic market regime detection engine for index markets using price action, volatility, technical state, and news sentiment."
 readme = "README.md"
 requires-python = ">=3.11"
