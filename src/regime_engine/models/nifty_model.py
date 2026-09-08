@@ -36,3 +36,5 @@ class NiftyCandle(BaseModel):
             raise ValueError(
                 "Low cannot be greater than High"
             )
+
+        return self

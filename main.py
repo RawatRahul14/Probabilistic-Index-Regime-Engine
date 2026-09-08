@@ -16,4 +16,4 @@ def main_func():
     returns_pipeline.main()
 
 if __name__ == "__main__":
-    main()
+    main_func()
