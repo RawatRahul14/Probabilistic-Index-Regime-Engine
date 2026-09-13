@@ -11,6 +11,7 @@ The system primarily focues on NIFTY50 and NIFTY options ecosystem.
 The central research problem is:
 
 $$
+
 [P(\text{Future Market Outcome} \mid \text{Current Market State})]
 
 $$
@@ -18,6 +19,7 @@ $$
 Where the market state can eventually include:
 
 $$
+
 [X_t = [\text{Returns}, \text{Volatility}, \text{Trend}, \text{Breadth}, \text{VIX}, \text{News}, \text{Derivatives}]]
 
 $$
@@ -83,16 +85,24 @@ close
 v0.2.0 - Returns Engine
 - Calculate Simple Returns:
 $$
+
 [R_t = \frac{S_t}{S_{t-1}}]
+
 $$
 
 - Calculate Log Returns:
+
 $$
+
 [r_t = \ln\left(\frac{S_t}{S_{t-1}}\right)]
+
 $$
 or,
+
 $$
+
 [r_t = \ln\left(R_t\right)]
+
 $$
 
 Example:
