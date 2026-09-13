@@ -8,7 +8,7 @@ from pathlib import Path
 class NiftyVolatility:
     def __init__(
             self,
-            file_path: str = "data/volatilty/nifty_volatility.db",
+            file_path: str = "data/volatility/nifty_volatility.db",
             returns_file_path: str = "data/returns/nifty_returns.db"
     ):
         """
@@ -140,16 +140,21 @@ class NiftyVolatility:
             ORDER BY date;
 
         """
-        # === Database Connection ===
-        with duckdb.connect(str(self.file_path)) as conn:
 
-            # === Adding an attachment ===
-            conn.execute(
-                f"ATTACH '{self.returns_file_path}' AS return_db"
-            )
+        try:
+            # === Database Connection ===
+            with duckdb.connect(str(self.file_path)) as conn:
 
-            # === Running the Query ===
-            conn.execute(query)
+                # === Adding an attachment ===
+                conn.execute(
+                    f"ATTACH '{self.returns_file_path}' AS return_db"
+                )
+
+                # === Running the Query ===
+                conn.execute(query)
+
+        except Exception as e:
+            raise RuntimeError("Error calculating the returns.") from e
 
     def _incremental_run(
             self
@@ -264,8 +269,12 @@ class NiftyVolatility:
             ORDER BY date;
         """
 
-        with duckdb.connect(str(self.file_path)) as conn:
-            conn.execute(query)
+        try:
+            with duckdb.connect(str(self.file_path)) as conn:
+                conn.execute(query)
+
+        except Exception as e:
+            raise RuntimeError("Error doing incremental calculations.") from e
 
     def calculate(
             self
