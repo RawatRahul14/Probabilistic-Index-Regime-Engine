@@ -1,0 +1,107 @@
+pre_market:
+  macro:
+    - "India inflation CPI latest"
+    - "India GDP latest economic data"
+    - "India manufacturing PMI latest"
+    - "India services PMI latest"
+    - "India industrial production IIP latest"
+    - "India unemployment economic outlook"
+  rbi_policy:
+    - "RBI monetary policy latest"
+    - "RBI repo rate latest"
+    - "RBI liquidity measures banking system"
+    - "RBI inflation outlook latest"
+    - "RBI governor latest comments"
+  global_cues:
+    - "US stock market overnight latest"
+    - "S&P 500 Nasdaq overnight market move"
+    - "Federal Reserve latest interest rate comments"
+    - "US inflation latest CPI"
+    - "US jobs data latest"
+    - "US treasury yields latest"
+    - "Asian markets latest Nikkei Hang Seng"
+    - "global risk sentiment markets"
+  crude_and_currency:
+    - "Brent crude oil price latest"
+    - "WTI crude oil latest"
+    - "USD INR latest"
+    - "Indian rupee latest news"
+    - "US dollar index latest"
+  fii_dii:
+    - "FII DII activity India latest"
+    - "foreign institutional investor India equities latest"
+    - "domestic institutional investor India equities latest"
+    - "FPI flows India stock market latest"
+  volatility:
+    - "India VIX latest"
+    - "global volatility index VIX latest"
+    - "market volatility India latest"
+    - "NIFTY volatility outlook latest"
+  derivatives:
+    - "NIFTY futures open interest latest"
+    - "NIFTY options open interest latest"
+    - "NIFTY put call ratio latest"
+    - "NIFTY options implied volatility latest"
+    - "NIFTY derivatives rollover latest"
+  banking:
+    - "Indian banking sector latest news"
+    - "HDFC Bank ICICI Bank SBI latest news"
+    - "banking sector RBI liquidity latest"
+  it:
+    - "Indian IT sector latest news"
+    - "TCS Infosys HCLTech Wipro latest news"
+    - "US technology spending Indian IT impact"
+  commodities:
+    - "gold price latest market news"
+    - "silver price latest"
+    - "commodity prices India inflation impact"
+  geopolitics:
+    - "geopolitical tensions markets latest"
+    - "Middle East tensions oil markets latest"
+    - "Russia Ukraine market impact latest"
+    - "global trade tensions markets latest"
+  corporate:
+    - "NIFTY 50 companies major announcements latest"
+    - "NIFTY 50 earnings latest"
+    - "India large cap corporate results latest"
+    - "NIFTY 50 mergers acquisitions latest"
+  sector_rotation:
+    - "India sector rotation stock market latest"
+    - "NIFTY sector performance latest"
+    - "bank IT auto pharma metal sector outlook India"
+
+open_market:
+  index:
+    - "NIFTY 50 intraday market news"
+    - "NIFTY 50 major market moving news"
+    - "Sensex NIFTY live market drivers"
+  volatility:
+    - "India VIX intraday latest"
+    - "NIFTY volatility spike latest"
+  derivatives:
+    - "NIFTY options unusual activity latest"
+    - "NIFTY futures open interest intraday"
+    - "NIFTY options open interest change today"
+    - "NIFTY put call ratio today"
+  fii_dii:
+    - "FII activity India market today"
+    - "foreign investor flows India equities today"
+  banking:
+    - "Bank NIFTY major news today"
+    - "Indian banks market moving news today"
+  it:
+    - "NIFTY IT major news today"
+    - "Indian IT stocks market moving news today"
+  corporate:
+    - "NIFTY 50 company breaking news today"
+    - "large cap Indian stocks breaking news today"
+  macro:
+    - "India economic data release today"
+    - "RBI announcement today"
+  global:
+    - "US futures latest"
+    - "Asian markets latest"
+    - "Brent crude latest"
+    - "USD INR latest"
+  geopolitical:
+    - "breaking geopolitical news markets"
