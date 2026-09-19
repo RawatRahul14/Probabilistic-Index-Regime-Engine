@@ -1,13 +1,19 @@
+# === Python Modules ===
+import asyncio
+
 # === regime Engine Modules ===
 from regime_engine.news.apis.async_tavily import fetch_news
 from regime_engine.utils.news_utils import fetch_queries, flatten_news_data, filter_articles
+
+from regime_engine.data.raw_news import RawNews
 
 class NewsIngestionPipeline:
     def __init__(self):
         self.news_data = fetch_queries(file_path = "config/news_queries.yaml")
         self.market_condition = "open_market"
+        self.raw_news = RawNews()
 
-    async def main(self):
+    async def main(self) -> None:
         try:
 
             ## === Fetching the news ===
@@ -22,11 +28,12 @@ class NewsIngestionPipeline:
             ## === filtering the articles ===
             news_content = filter_articles(news_data = news_content)
 
-            return news_content
+            ## === Saving the filtered news ===
+            self.raw_news.insert_articles(news_data = news_content)
 
         except Exception as e:
             raise RuntimeError("Error Running the 'NewsIngestionPipeline'.") from e
 
 if __name__ == "__main__":
     pipeline = NewsIngestionPipeline()
-    data = pipeline.main()
+    asyncio.run(pipeline.main())
