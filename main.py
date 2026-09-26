@@ -1,6 +1,9 @@
 # === Python Modules ===
 import asyncio
 
+# === Database Modules ===
+import duckdb
+
 # === Regime Engine Pipelines ===
 from regime_engine.pipelines import (
     NiftyIngestPipeline,
@@ -9,7 +12,8 @@ from regime_engine.pipelines import (
 )
 
 from regime_engine.pipelines import (
-    NewsIngestionPipeline
+    NewsIngestionPipeline,
+    NewsDedupPipeline
 )
 
 # === Main Function ===
@@ -27,12 +31,25 @@ def run_nifty_pipelines() -> None:
     volatility_pipeline = NiftyVolatilityPipeline()
     volatility_pipeline.main()
 
-async def main_fun() -> None:
+async def run_news_pipelines() -> None:
+
+    ## === News ingestion ===
     news_pipeline = NewsIngestionPipeline()
+    await news_pipeline.main()
+
+    ## === Calling the Data ===
+    with duckdb.connect("data/news/raw_news.db") as conn:
+        data = conn.execute("SELECT * FROM raw_news").fetch_df()
+
+    ## === Deuplication ===
+    dedup_pipeline = NewsDedupPipeline()
+    dedup_pipeline.main(data = data)
+
+async def main_fun() -> None:
 
     await asyncio.gather(
         asyncio.to_thread(run_nifty_pipelines),
-        news_pipeline.main()
+        run_news_pipelines()
     )
 
 if __name__ == "__main__":
