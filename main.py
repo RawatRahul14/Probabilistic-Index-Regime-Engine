@@ -6,6 +6,7 @@ import duckdb
 
 # === Regime Engine Pipelines ===
 from regime_engine.pipelines import (
+    NiftyDateChangePipeline,
     NiftyIngestPipeline,
     NiftyReturnsPipeline,
     NiftyVolatilityPipeline
@@ -19,8 +20,15 @@ from regime_engine.pipelines import (
 # === Main Function ===
 def run_nifty_pipelines() -> None:
 
+    ## === Getting the date ===
+    date_pipeline = NiftyDateChangePipeline()
+    date = date_pipeline.main()
+
+    if date is not None:
+        date = date.get("last_update_date").split("T")[0]
+
     ## === ingestion Pipeline ===
-    ingest_pipeline = NiftyIngestPipeline()
+    ingest_pipeline = NiftyIngestPipeline(ingest_date = date)
     ingest_pipeline.main()
 
     ## === Returns Pipeline ===

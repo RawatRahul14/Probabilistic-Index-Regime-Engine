@@ -15,6 +15,7 @@ from pathlib import Path
 class NiftyIngest:
     def __init__(
             self,
+            ingest_date: None | str,
             interval: str = "1d",
             period: str = "5y",
             file_path: str = "data/raw/nifty"
@@ -22,6 +23,7 @@ class NiftyIngest:
         """
         Class to Ingest Historical Nifty Index data into Duckdb.
         """
+        self.ingest_date = ingest_date
         self.interval = interval
         self.period = period
 
@@ -33,24 +35,47 @@ class NiftyIngest:
         """
         try:
 
-            ## === Downloading Data ===
-            data = yfinance.download(
-                tickers = "^NSEI",
-                multi_level_index = False,
-                interval = self.interval,
-                period = self.period,
-                rounding = True
-            )
+            ## === For New download ===
+            if self.ingest_date is None:
 
-            ## === Cleaning Data ===
-            data = data.drop(
-                columns = "Volume",
-                errors = "ignore"
-            ).reset_index()
+                ## === Downloading Data ===
+                data = yfinance.download(
+                    tickers = "^NSEI",
+                    multi_level_index = False,
+                    interval = self.interval,
+                    period = self.period,
+                    rounding = True
+                )
 
-            data.columns = data.columns.str.lower()
+                ## === Cleaning Data ===
+                data = data.drop(
+                    columns = "Volume",
+                    errors = "ignore"
+                ).reset_index()
 
-            return data
+                data.columns = data.columns.str.lower()
+
+                return data
+
+            ## === For increment downloading  ===
+            else:
+                data = yfinance.download(
+                    tickers = "^NSEI",
+                    multi_level_index = False,
+                    interval = self.interval,
+                    start = self.ingest_date,
+                    rounding = True
+                )
+
+                ## === Cleaning Data ===
+                data = data.drop(
+                    columns = "Volume",
+                    errors = "ignore"
+                ).reset_index()
+
+                data.columns = data.columns.str.lower()
+
+                return data
 
         except Exception as e:
             raise ValueError(f"Error Downloading Data: {e}")
