@@ -52,7 +52,7 @@ def change_date(
     """
     Checksthe date to see if there's need to change the date or not
     """
-    if time > "12:00:00":
+    if time > "15:45:00":
         return True
     else:
         return False
