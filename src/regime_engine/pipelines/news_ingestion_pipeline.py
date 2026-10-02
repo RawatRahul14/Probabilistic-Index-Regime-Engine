@@ -13,7 +13,7 @@ class NewsIngestionPipeline:
         self.market_condition = "open_market"
         self.raw_news = RawNews()
 
-    async def main(self) -> None:
+    async def main(self):
         try:
 
             ## === Fetching the news ===
@@ -29,7 +29,9 @@ class NewsIngestionPipeline:
             news_content = filter_articles(news_data = news_content)
 
             ## === Saving the filtered news ===
-            self.raw_news.insert_articles(news_data = news_content)
+            count = self.raw_news.insert_articles(news_data = news_content)
+
+            return count
 
         except Exception as e:
             raise RuntimeError("Error Running the 'NewsIngestionPipeline'.") from e

@@ -20,5 +20,8 @@ class NewsDedupPipeline:
             dedup_news_save = DedupNews()
             dedup_news_save.insert_articles(dedup_news = dedup_data)
 
+            ## === Returning the dedup data for sentiment analysis ===
+            return dedup_data
+
         except Exception as e:
             raise ValueError("Error deduping the news.") from e

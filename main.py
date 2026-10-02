@@ -14,8 +14,12 @@ from regime_engine.pipelines import (
 
 from regime_engine.pipelines import (
     NewsIngestionPipeline,
-    NewsDedupPipeline
+    NewsDedupPipeline,
+    NewsSentimentPipeline
 )
+
+# === Utils ===
+from regime_engine.utils.news_utils import get_data_as_dataframe
 
 # === Main Function ===
 def run_nifty_pipelines() -> None:
@@ -43,15 +47,18 @@ async def run_news_pipelines() -> None:
 
     ## === News ingestion ===
     news_pipeline = NewsIngestionPipeline()
-    await news_pipeline.main()
+    count = await news_pipeline.main()
 
-    ## === Calling the Data ===
-    with duckdb.connect("data/news/raw_news.db") as conn:
-        data = conn.execute("SELECT * FROM raw_news").fetch_df()
+    ## === Dataframe Conversion ===
+    data = get_data_as_dataframe(count = count)
 
     ## === Deuplication ===
     dedup_pipeline = NewsDedupPipeline()
-    dedup_pipeline.main(data = data)
+    dedup_data = dedup_pipeline.main(data = data)
+
+    ## === Sentiment Analysis ===
+    sentiment_pipeline = NewsSentimentPipeline()
+    _ = await sentiment_pipeline.run(articles = dedup_data)
 
 async def main_fun() -> None:
 

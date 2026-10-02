@@ -4,6 +4,7 @@ from .nifty_volatility_pipeline import NiftyVolatilityPipeline
 from .news_ingestion_pipeline import NewsIngestionPipeline
 from .news_dedup_pipeline import NewsDedupPipeline
 from .nifty_date_change_pipeline import NiftyDateChangePipeline
+from .news_sentiment_pipeline import NewsSentimentPipeline
 
 __all__ = [
     "NiftyIngestPipeline",
@@ -11,5 +12,6 @@ __all__ = [
     "NiftyVolatilityPipeline",
     "NewsIngestionPipeline",
     "NewsDedupPipeline",
-    "NiftyDateChangePipeline"
+    "NiftyDateChangePipeline",
+    "NewsSentimentPipeline"
 ]

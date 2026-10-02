@@ -1,3 +1,7 @@
+# === Database Modules ===
+import pandas as pd
+import duckdb
+
 # === YAML Modules ===
 import yaml
 
@@ -96,3 +100,20 @@ def filter_articles(
         filtered_news[category] = filtered_articles
 
     return filtered_news
+
+def get_data_as_dataframe(
+        count: int
+) -> pd.DataFrame:
+    """
+    Convert categorized news dictionary into a single DataFrame.
+    """
+    with duckdb.connect("./data/news/raw_news.db") as conn:
+        query = f"""
+            SELECT *
+            FROM raw_news
+            ORDER BY published_date DESC
+            LIMIT {count}
+        """
+        df = conn.execute(query).fetchdf()
+
+    return df

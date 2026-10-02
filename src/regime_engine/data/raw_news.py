@@ -61,6 +61,7 @@ class RawNews:
         """
         Inserts filtered news articles into the DuckDB database.
         """
+        article_count = 0
         try:
 
             ## === Database Connection ===
@@ -71,6 +72,8 @@ class RawNews:
 
                     ## === Looping through artciles ===
                     for article in articles:
+
+                        article_count += 1
 
                         ## === Published Date ===
                         published_date = article.get("published_date")
@@ -108,6 +111,8 @@ class RawNews:
                                 published_date
                             ]
                         )
+
+            return article_count
 
         except Exception as e:
             raise RuntimeError(f"Error inserting news articles into database.") from e

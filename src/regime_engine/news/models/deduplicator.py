@@ -1,5 +1,5 @@
 # === Python Modules ===
-from typing import List, Dict, Any, Set
+from typing import List, Set
 import numpy as np
 import pandas as pd
 
@@ -74,7 +74,7 @@ class NewsDeduplicator:
 
         ## === Empty Article Check ===
         if articles.empty:
-            return []
+            return pd.DataFrame()
 
         ## === Preparing Text ===
         texts = self._prepare_text(articles = articles)
