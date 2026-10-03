@@ -123,15 +123,14 @@ class NiftyReturns:
             self
     ) -> None:
         """
-        Calculates the incremental returns
+        Calculates the incremental returns. Recalculates the latest existing date to handle updated partial market candles.
         """
         query = """
             WITH last_calculated AS (
                 SELECT MAX(date) AS max_date
                 FROM nifty_returns
             ),
-
-        needed_data AS (
+            needed_data AS (
                 SELECT *
                 FROM raw_data.nifty
                 WHERE date >= (
@@ -146,59 +145,66 @@ class NiftyReturns:
                     LIMIT 1
                 )
             ),
-
-        calc AS (
+            calc AS (
+                SELECT
+                    date,
+                    close / LAG(close, 1)
+                        OVER (ORDER BY date) - 1
+                        AS return_1,
+                    close / LAG(close, 5)
+                        OVER (ORDER BY date) - 1
+                        AS return_5,
+                    close / LAG(close, 10)
+                        OVER (ORDER BY date) - 1
+                        AS return_10,
+                    close / LAG(close, 20)
+                        OVER (ORDER BY date) - 1
+                        AS return_20,
+                    LN(
+                        close / LAG(close, 1)
+                        OVER (ORDER BY date)
+                    ) AS log_return_1
+                FROM needed_data
+            )
+            INSERT OR REPLACE INTO nifty_returns (
+                date,
+                return_1,
+                return_5,
+                return_10,
+                return_20,
+                log_return_1
+            )
             SELECT
                 date,
-                close / LAG(close, 1) OVER (ORDER BY date) - 1 AS return_1,
-                close / LAG(close, 5) OVER (ORDER BY date) - 1 AS return_5,
-                close / LAG(close, 10) OVER (ORDER BY date) - 1 AS return_10,
-                close / LAG(close, 20) OVER (ORDER BY date) - 1 AS return_20,
-                LN(close / LAG(close, 1) OVER (ORDER BY date) ) AS log_return_1
-            FROM needed_data
-        )
-
-        INSERT INTO nifty_returns (
-            date,
-            return_1,
-            return_5,
-            return_10,
-            return_20,
-            log_return_1
-        )
-
-        SELECT
-            date,
-            return_1,
-            return_5,
-            return_10,
-            return_20,
-            log_return_1
-
-        FROM calc
-
-        WHERE date > (
-            SELECT max_date
-            FROM last_calculated
-        )
-
-        ORDER BY date;
+                return_1,
+                return_5,
+                return_10,
+                return_20,
+                log_return_1
+            FROM calc
+            WHERE date >= (
+                SELECT max_date
+                FROM last_calculated
+            )
+            ORDER BY date;
         """
 
         try:
-
             ## === Database Connection ===
+
             with duckdb.connect(self.file_path) as conn:
-
                 ## === Adding an attachment ===
-                conn.execute(
-                    f"ATTACH '{self.raw_file_path}' AS raw_data"
-                )
 
+                conn.execute(f"""ATTACH '{self.raw_file_path}' AS raw_data""")
+
+                ## === Running the Query ===
                 conn.execute(query)
 
         except Exception as e:
-            raise RuntimeError("Error doing incremental calculations.") from e
+
+            raise RuntimeError(
+                "Error doing incremental calculations."
+            ) from e
 
     def calculate(
             self

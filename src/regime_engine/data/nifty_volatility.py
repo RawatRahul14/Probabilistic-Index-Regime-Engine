@@ -160,19 +160,24 @@ class NiftyVolatility:
             self
     ) -> None:
         """
-        Calculates volatility only for newly added return data.
+        Calculates volatility incrementally. Recalculates the latest existing date so that volatility reflects updated partial market candles.
         """
+
         query = f"""
             ATTACH '{self.returns_file_path}' AS returns_db;
-            INSERT INTO nifty_volatility
-            WITH previous_rows AS (
+            INSERT OR REPLACE INTO nifty_volatility
+            WITH last_calculated AS (
+                SELECT MAX(date) AS max_date
+                FROM nifty_volatility
+            ),
+            previous_rows AS (
                 SELECT
                     date,
                     log_return_1
                 FROM returns_db.nifty_returns
-                WHERE date <= (
-                    SELECT MAX(date)
-                    FROM nifty_volatility
+                WHERE date < (
+                    SELECT max_date
+                    FROM last_calculated
                 )
                 ORDER BY date DESC
                 LIMIT 20
@@ -182,9 +187,9 @@ class NiftyVolatility:
                     date,
                     log_return_1
                 FROM returns_db.nifty_returns
-                WHERE date > (
-                    SELECT MAX(date)
-                    FROM nifty_volatility
+                WHERE date >= (
+                    SELECT max_date
+                    FROM last_calculated
                 )
             ),
             combined_data AS (
@@ -262,15 +267,19 @@ class NiftyVolatility:
                 vol_10,
                 vol_21
             FROM calculated_volatility
-            WHERE date > (
-                SELECT MAX(date)
-                FROM nifty_volatility
+            WHERE date >= (
+                SELECT max_date
+                FROM last_calculated
             )
             ORDER BY date;
         """
 
         try:
+
+            ## === Database Connection ===
             with duckdb.connect(str(self.file_path)) as conn:
+
+                ## === Running the Query ===
                 conn.execute(query)
 
         except Exception as e:
