@@ -1,7 +1,30 @@
+<div align="center">
+
 # Probabilistic Index Regime Engine
 
-> A quantitative research platform for modelling Indian index-market conditions as probabilistic states using price dynamics, volatility, and financial news intelligence.
+[![Python](https://img.shields.io/badge/Python-3.11+-3776AB.svg)](#)
+[![LangGraph](https://img.shields.io/badge/LangGraph-Agentic_Workflows-FF4081.svg)](#)
+[![DuckDB](https://img.shields.io/badge/DuckDB-Analytics_Engine-FFF000?labelColor=black.svg)](#)
+[![Probability](https://img.shields.io/badge/Modelling-Probabilistic-00C853.svg)](#)
+[![C++](https://img.shields.io/badge/C%2B%2B-20-00599C.svg)](#)
+[![Pydantic](https://img.shields.io/badge/Pydantic-Data_Validation-E92063.svg)](#)
+[![yfinance](https://img.shields.io/badge/yfinance-Market_Data-6C63FF.svg)](#)
+[![Tavily](https://img.shields.io/badge/Tavily-News_Intelligence-111827.svg)](#)
+[![AsyncIO](https://img.shields.io/badge/AsyncIO-Concurrent_Pipelines-3776AB.svg)](#)
 
+A quantitative research platform for modelling Indian index-market conditions as probabilistic states using price dynamics, volatility, and financial news intelligence.
+
+</div>
+
+---
+<!-- 
+## Features
+
+### Core Capabilities
+
+- **State Modelling:** Probabilistic regime detection using hidden state estimation across broad-market indices.
+- **Multi-Modal Signals:** Combines continuous price dynamics, volatility surface indicators, and unstructured financial news sentiment.
+- **Quantitative Engine:** Built for backtesting, regime transition tracking, and automated metric extraction. -->
 
 ## Table of Contents
 
