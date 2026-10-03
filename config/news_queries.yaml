@@ -78,30 +78,30 @@ open_market:
   volatility:
     - "India VIX intraday latest"
     - "NIFTY volatility spike latest"
-  derivatives:
-    - "NIFTY options unusual activity latest"
-    - "NIFTY futures open interest intraday"
-    - "NIFTY options open interest change today"
-    - "NIFTY put call ratio today"
-  fii_dii:
-    - "FII activity India market today"
-    - "foreign investor flows India equities today"
-  banking:
-    - "Bank NIFTY major news today"
-    - "Indian banks market moving news today"
-  it:
-    - "NIFTY IT major news today"
-    - "Indian IT stocks market moving news today"
-  corporate:
-    - "NIFTY 50 company breaking news today"
-    - "large cap Indian stocks breaking news today"
-  macro:
-    - "India economic data release today"
-    - "RBI announcement today"
-  global:
-    - "US futures latest"
-    - "Asian markets latest"
-    - "Brent crude latest"
-    - "USD INR latest"
-  geopolitical:
-    - "breaking geopolitical news markets"
+  # derivatives:
+  #   - "NIFTY options unusual activity latest"
+  #   - "NIFTY futures open interest intraday"
+  #   - "NIFTY options open interest change today"
+  #   - "NIFTY put call ratio today"
+  # fii_dii:
+  #   - "FII activity India market today"
+  #   - "foreign investor flows India equities today"
+  # banking:
+  #   - "Bank NIFTY major news today"
+  #   - "Indian banks market moving news today"
+  # it:
+  #   - "NIFTY IT major news today"
+  #   - "Indian IT stocks market moving news today"
+  # corporate:
+  #   - "NIFTY 50 company breaking news today"
+  #   - "large cap Indian stocks breaking news today"
+  # macro:
+  #   - "India economic data release today"
+  #   - "RBI announcement today"
+  # global:
+  #   - "US futures latest"
+  #   - "Asian markets latest"
+  #   - "Brent crude latest"
+  #   - "USD INR latest"
+  # geopolitical:
+  #   - "breaking geopolitical news markets"

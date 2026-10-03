@@ -1,8 +1,10 @@
 # === Python Modules ===
 from email.utils import parsedate_to_datetime
+from datetime import datetime, timezone
 
 # === Database Modules ===
 import duckdb
+import pandas as pd
 
 # === Path Modules ===
 from pathlib import Path
@@ -54,6 +56,60 @@ class RawNews:
         with duckdb.connect(str(self.file_path)) as conn:
             conn.execute(query)
 
+    def _convert_to_df(
+            self,
+            news_data: dict[str, list[dict]]
+    ) -> pd.DataFrame:
+        """
+        Converts fetched news data into a DataFrame matching the raw_news database schema.
+        """
+        ## === List to hold the data ===
+        rows = []
+
+        ## === Fetch Time ===
+        fetch_time = datetime.now(timezone.utc)
+
+        ## === Looping through the News Categories ===
+        for category, articles in news_data.items():
+
+            ## === Looping through articles ===
+            for article in articles:
+
+                ## === Published Date ===
+                published_date = article.get("published_date")
+
+                if published_date:
+                    published_date = parsedate_to_datetime(published_date)
+
+                ## === Appending the row ===
+                rows.append({
+                    "category": category,
+                    "query": article.get("query"),
+                    "topic": article.get("topic"),
+                    "title": article.get("title"),
+                    "url": article.get("url"),
+                    "content": article.get("content"),
+                    "score": article.get("score"),
+                    "published_date": published_date,
+                    "fetched_at": fetch_time
+                })
+
+        ## === Creating the DataFrame ===
+        return pd.DataFrame(
+            rows,
+            columns = [
+                "category",
+                "query",
+                "topic",
+                "title",
+                "url",
+                "content",
+                "score",
+                "published_date",
+                "fetched_at"
+            ]
+        )
+
     def insert_articles(
             self,
             news_data: dict[str, list[dict]]
@@ -61,58 +117,52 @@ class RawNews:
         """
         Inserts filtered news articles into the DuckDB database.
         """
-        article_count = 0
-        try:
+        ## === Convert to DataFrame ===
+        news_df = self._convert_to_df(news_data)
 
+        if news_df.empty:
+            return None
+
+        try:
             ## === Database Connection ===
             with duckdb.connect(str(self.file_path)) as conn:
 
-                ## === Looping through the News Categories ===
-                for category, articles in news_data.items():
+                ### === Inserting the DataFrame into the Database ===
+                conn.register("news_df", news_df)
 
-                    ## === Looping through artciles ===
-                    for article in articles:
+                conn.execute(
+                    """
+                    INSERT OR IGNORE INTO raw_news (
+                        category,
+                        query,
+                        topic,
+                        title,
+                        url,
+                        content,
+                        score,
+                        published_date,
+                        fetched_at
+                    )
 
-                        article_count += 1
+                    SELECT
+                        category,
+                        query,
+                        topic,
+                        title,
+                        url,
+                        content,
+                        score,
+                        published_date,
+                        fetched_at
+                    FROM news_df
+                    """
+                )
 
-                        ## === Published Date ===
-                        published_date = article.get("published_date")
-
-                        if published_date:
-                            published_date = parsedate_to_datetime(published_date)
-
-                        ## === Insert Query ===
-                        query = """
-                            INSERT OR IGNORE INTO raw_news (
-                                category,
-                                query,
-                                topic,
-                                title,
-                                url,
-                                content,
-                                score,
-                                published_date
-                            )
-
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                        """
-
-                        ## === Inserting the data ===
-                        conn.execute(
-                            query,
-                            [
-                                category,
-                                article.get("query"),
-                                article.get("topic"),
-                                article.get("title"),
-                                article.get("url"),
-                                article.get("content"),
-                                article.get("score"),
-                                published_date
-                            ]
-                        )
-
-            return article_count
+            ## === Returning the fetched_at ===
+            return news_df["fetched_at"].iloc[0]
+    
+        except duckdb.Error as e:
+            raise RuntimeError(f"Error inserting news articles into database: {e}") from e
 
         except Exception as e:
-            raise RuntimeError(f"Error inserting news articles into database.") from e
+            raise RuntimeError(f"Error inserting news articles into database. {e}") from e

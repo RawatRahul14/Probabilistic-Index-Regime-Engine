@@ -102,18 +102,23 @@ def filter_articles(
     return filtered_news
 
 def get_data_as_dataframe(
-        count: int
+        time
 ) -> pd.DataFrame:
     """
-    Convert categorized news dictionary into a single DataFrame.
+    Retrieves news articles belonging to a specific ingestion run.
     """
+
     with duckdb.connect("./data/news/raw_news.db") as conn:
-        query = f"""
+
+        query = """
             SELECT *
             FROM raw_news
-            ORDER BY published_date DESC
-            LIMIT {count}
+            WHERE fetched_at = ?
         """
-        df = conn.execute(query).fetchdf()
+
+        df = conn.execute(
+            query,
+            [time]
+        ).fetchdf()
 
     return df

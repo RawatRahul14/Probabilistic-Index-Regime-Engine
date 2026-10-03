@@ -47,10 +47,10 @@ async def run_news_pipelines() -> None:
 
     ## === News ingestion ===
     news_pipeline = NewsIngestionPipeline()
-    count = await news_pipeline.main()
+    fetched_at_time = await news_pipeline.main()
 
     ## === Dataframe Conversion ===
-    data = get_data_as_dataframe(count = count)
+    data = get_data_as_dataframe(time = fetched_at_time)
 
     ## === Deuplication ===
     dedup_pipeline = NewsDedupPipeline()
