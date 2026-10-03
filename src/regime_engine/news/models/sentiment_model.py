@@ -100,7 +100,11 @@ class SentimentModel(BaseModel):
         total_probability = self.p_bull + self.p_neutral + self.p_bear
 
         ## === Error Handling ===
-        if abs(total_probability - 1.0) > 1e-6:
-            raise ValueError("The sum of p_bull, p_neutral, and p_bear must equal 1.0.")
+        if total_probability <= 0.0:
+            raise ValueError("The sum of p_bull, p_neutral, and p_bear must be greater than 0.0.")
+
+        self.p_bull /= total_probability
+        self.p_neutral /= total_probability
+        self.p_bear /= total_probability
 
         return self

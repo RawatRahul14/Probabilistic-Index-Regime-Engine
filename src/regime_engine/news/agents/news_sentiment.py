@@ -85,9 +85,15 @@ async def process_articles_concurrently(
         semaphore = asyncio.Semaphore(concurrency)
 
         ## === Defining the worker function ===
-        async def process_with_limit(article: dict) -> dict:
+        async def process_with_limit(article: dict) -> dict | None:
             async with semaphore:
-                return await sentiment_agent(article)
+
+                try:
+                    return await sentiment_agent(article)
+
+                except Exception as e:
+                    print(f"Error processing article {article['article_id']}: {e}")
+                    return None
 
         ## === Creating tasks for all articles ===
         tasks = [
@@ -95,7 +101,14 @@ async def process_articles_concurrently(
         ]
 
         ## === Gathering results ===
-        results = await asyncio.gather(*tasks, return_exceptions = False)
+        results = await asyncio.gather(*tasks)
+
+        ### === Filtering out None results ===
+        results = [
+            result
+            for result in results
+            if result is not None
+        ]
 
         return results
 
@@ -144,7 +157,7 @@ async def sentiment_analysis(
         return articles.merge(
             sentiment_df,
             on = "article_id",
-            how = "left"
+            how = "inner"
         )
 
     except Exception as e:
